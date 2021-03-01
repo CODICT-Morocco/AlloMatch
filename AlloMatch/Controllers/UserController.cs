@@ -30,6 +30,13 @@ namespace AlloMatch.Controllers
             return Response<AccessTokenDto>.Success(result);
         }
 
+        public async Task<Response> Register(RegisterRequestDto dto)
+        {
+
+            
+
+        }
+
         [Authorize]
         [HttpGet("profile")]
         public async Task<Response<UserProfileDto>> Profile()
@@ -37,4 +44,6 @@ namespace AlloMatch.Controllers
     }
 
     public record LoginRequestDto([Required][EmailAddress] string Email, [Required] string Password);
+
+
 }

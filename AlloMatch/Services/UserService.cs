@@ -41,6 +41,20 @@ namespace AlloMatch.Services
             return new AccessTokenDto(token, jwtSecurityToken.Payload.Exp!.Value);
         }
 
+        public async Task<Response> Register(RegisterRequestDto dto)
+        {
+            var normalizedEmail = dto.Email.ToUpperInvariant();
+            if (await _userManager.Users.AnyAsync(u => u.Email == normalizedEmail))
+                return new Response(
+                    message: "Failed to create account",
+                    errors: new List<string>
+                    {
+                        "Email Already Exists"
+                    });
+
+
+        }
+
         public async Task<UserProfileDto> GetUserInfo(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
