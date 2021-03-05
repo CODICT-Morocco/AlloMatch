@@ -1,4 +1,5 @@
 using AlloMatch.Configurations;
+using AlloMatch.Constants;
 using AlloMatch.DTOs;
 using AlloMatch.Entities;
 using AlloMatch.Services;
@@ -17,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -126,6 +128,20 @@ namespace AlloMatch
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AlloMatch v1"));
+
+                // Move this out
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+                    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<long>>>();
+                    if (!context.Roles.Any())
+                    {
+                        roleManager.CreateAsync(new IdentityRole<long>(Roles.Administrator)).Wait();
+                        roleManager.CreateAsync(new IdentityRole<long>(Roles.Professional)).Wait();
+                        roleManager.CreateAsync(new IdentityRole<long>(Roles.Player)).Wait();
+                        context.SaveChanges();
+                    }
+                }
             }
 
             app.UseHttpsRedirection();
