@@ -67,11 +67,33 @@ namespace AlloMatch.Services
             {
                 new Organisation
                 {
-                    Name = dto.OrganisationName
+                    Name = dto.OrganisationName,
+                    PhoneNumber = dto.PhoneNumber
                 }
             };
             await _userManager.UpdateAsync(user);
             return Response<ApplicationUser>.Success(user);
+        }
+
+        public async Task<Response<ApplicationUser>> UpdateUserInfos(string userId, UpdateUerInfosDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user == null)
+                return Response<ApplicationUser>.Failure("User does not exists");
+           
+
+            user.Email = dto.Email;
+            user.PhoneNumber = dto.PhoneNumber;
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return Response<ApplicationUser>.Failure("Some.Error");
+
+            return Response<ApplicationUser>.Success(user);
+
+
         }
 
         public async Task<UserProfileDto> GetUserInfo(string userId)

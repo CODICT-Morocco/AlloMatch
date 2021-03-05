@@ -36,8 +36,15 @@ namespace AlloMatch.Controllers
             // TODO: RETURN PROPER RESPONSE, NOT THIS
             return await _userService.RegisterProfessional(dto);
         }
-
         [Authorize]
+        [HttpPut("professionals/update-infos")]
+        public async Task<Response> UpdateUserInfos(UpdateUerInfosDto dto)
+        {
+            // TODO: RETURN PROPER RESPONSE, NOT THIS
+            return await _userService.UpdateUserInfos(_currentUserService.UserId, dto);
+        }
+
+        [Authorize("Professional")]
         [HttpGet("profile")]
         public async Task<Response<UserProfileDto>> Profile()
             => Response<UserProfileDto>.Success(await _userService.GetUserInfo(_currentUserService.UserId));

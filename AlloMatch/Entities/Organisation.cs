@@ -6,6 +6,8 @@ namespace AlloMatch.Entities
     {
         public string Name { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public List<SoccerField> SoccerFields { get; set; }
     }
 }

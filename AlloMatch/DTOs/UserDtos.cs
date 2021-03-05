@@ -12,4 +12,9 @@ namespace AlloMatch.DTOs
         [Required] string LastName,
         [Required] string PhoneNumber,
         [Required] string OrganisationName);
+    public record UpdateUerInfosDto(
+        [Required] string FirstName,
+        [Required] string LastName,
+        [Required] string PhoneNumber,
+        [Required][EmailAddress] string Email);
 }
