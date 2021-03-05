@@ -10,5 +10,6 @@ namespace AlloMatch.Services
         Task<UserProfileDto> GetUserInfo(string userId);
         Task<Response<ApplicationUser>> RegisterProfessional(RegisterProfessionalDto dto);
         Task<Response<ApplicationUser>> UpdateUserInfos(string userId, UpdateUerInfosDto dto);
+        Task<Response> UpdatePassword(string userId, UpdatePasswordDto dto);
     }
 }

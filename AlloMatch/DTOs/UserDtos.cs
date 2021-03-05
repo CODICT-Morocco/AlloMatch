@@ -15,6 +15,23 @@ namespace AlloMatch.DTOs
     public record UpdateUerInfosDto(
         [Required] string FirstName,
         [Required] string LastName,
-        [Required] string PhoneNumber,
-        [Required][EmailAddress] string Email);
+        [Required] string PhoneNumber);
+
+    public class UpdatePasswordDto
+    {
+        [Required]
+        public string Password { get; set; }
+        [Required] 
+        public string NewPassword { get; set; }
+
+        [Required]
+        [Compare("NewPassword")]
+        public string PasswordConfirmation { get; set; }
+
+
+
+
+    }
+
+       
 }

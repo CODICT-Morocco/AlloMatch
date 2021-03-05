@@ -81,9 +81,7 @@ namespace AlloMatch.Services
 
             if(user == null)
                 return Response<ApplicationUser>.Failure("User does not exists");
-           
 
-            user.Email = dto.Email;
             user.PhoneNumber = dto.PhoneNumber;
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
@@ -92,9 +90,9 @@ namespace AlloMatch.Services
                 return Response<ApplicationUser>.Failure("Some.Error");
 
             return Response<ApplicationUser>.Success(user);
-
-
         }
+        
+        
 
         public async Task<UserProfileDto> GetUserInfo(string userId)
         {
@@ -132,6 +130,24 @@ namespace AlloMatch.Services
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(_jwtConfiguration.DurationInMinutes),
                 signingCredentials: signingCredentials);
+        }
+
+        public async Task<Response> UpdatePassword(string userId, UpdatePasswordDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return new Response("User does not exists");
+
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.Password, dto.NewPassword);
+
+            if (!result.Succeeded)
+                return new Response("Error",new List<string> { result.Errors.ToString() });
+
+            return new Response("Password updated with success");
+
+            
         }
     }
 }

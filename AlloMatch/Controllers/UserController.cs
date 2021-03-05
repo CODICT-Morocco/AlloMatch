@@ -44,6 +44,13 @@ namespace AlloMatch.Controllers
             return await _userService.UpdateUserInfos(_currentUserService.UserId, dto);
         }
 
+        [HttpPatch("professionals/update-password")]
+        public async Task<Response> UpdatePassword(UpdatePasswordDto dto)
+        {
+            return await _userService.UpdatePassword(_currentUserService.UserId, dto);
+            
+        }
+
         [Authorize("Professional")]
         [HttpGet("profile")]
         public async Task<Response<UserProfileDto>> Profile()
