@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AlloMatch.Entities
 {
@@ -10,6 +7,5 @@ namespace AlloMatch.Entities
         public string Name { get; set; }
 
         public List<SoccerField> SoccerFields { get; set; }
-
     }
 }

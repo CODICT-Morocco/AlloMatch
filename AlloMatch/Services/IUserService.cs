@@ -1,4 +1,5 @@
 ﻿using AlloMatch.DTOs;
+using AlloMatch.Entities;
 using System.Threading.Tasks;
 
 namespace AlloMatch.Services
@@ -7,5 +8,6 @@ namespace AlloMatch.Services
     {
         Task<AccessTokenDto> Login(string email, string password);
         Task<UserProfileDto> GetUserInfo(string userId);
+        Task<Response<ApplicationUser>> RegisterProfessional(RegisterProfessionalDto dto);
     }
 }

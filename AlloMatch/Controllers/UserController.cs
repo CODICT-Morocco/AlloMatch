@@ -30,11 +30,11 @@ namespace AlloMatch.Controllers
             return Response<AccessTokenDto>.Success(result);
         }
 
-        public async Task<Response> Register(RegisterRequestDto dto)
+        [HttpPost("professionals/register")]
+        public async Task<Response> Register(RegisterProfessionalDto dto)
         {
-
-            
-
+            // TODO: RETURN PROPER RESPONSE, NOT THIS
+            return await _userService.RegisterProfessional(dto);
         }
 
         [Authorize]

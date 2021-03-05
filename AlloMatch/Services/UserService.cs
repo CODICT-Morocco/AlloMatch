@@ -1,4 +1,5 @@
 ﻿using AlloMatch.Configurations;
+using AlloMatch.Constants;
 using AlloMatch.DTOs;
 using AlloMatch.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -41,18 +42,36 @@ namespace AlloMatch.Services
             return new AccessTokenDto(token, jwtSecurityToken.Payload.Exp!.Value);
         }
 
-        public async Task<Response> Register(RegisterRequestDto dto)
+        public async Task<Response<ApplicationUser>> RegisterProfessional(RegisterProfessionalDto dto)
         {
-            var normalizedEmail = dto.Email.ToUpperInvariant();
-            if (await _userManager.Users.AnyAsync(u => u.Email == normalizedEmail))
-                return new Response(
-                    message: "Failed to create account",
-                    errors: new List<string>
-                    {
-                        "Email Already Exists"
-                    });
+            if (await _userManager.FindByEmailAsync(dto.Email) != null)
+                return Response<ApplicationUser>.Failure("Used.Email");
 
+            var user = new ApplicationUser
+            {
+                Email = dto.Email,
+                UserName = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber
+            };
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+                return Response<ApplicationUser>.Failure("Some.Error");
 
+            result = await _userManager.AddToRoleAsync(user, Roles.Professional);
+            if (!result.Succeeded)
+                return Response<ApplicationUser>.Failure("Some.Error");
+
+            user.Organisations = new List<Organisation>
+            {
+                new Organisation
+                {
+                    Name = dto.OrganisationName
+                }
+            };
+            await _userManager.UpdateAsync(user);
+            return Response<ApplicationUser>.Success(user);
         }
 
         public async Task<UserProfileDto> GetUserInfo(string userId)
