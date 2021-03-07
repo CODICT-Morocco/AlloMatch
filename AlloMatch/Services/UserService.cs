@@ -137,7 +137,7 @@ namespace AlloMatch.Services
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
-                return new Response("User does not exists");
+                return new Response("User does not exists", new string[] { "User Not Found" });
 
 
             var result = await _userManager.ChangePasswordAsync(user, dto.Password, dto.NewPassword);
