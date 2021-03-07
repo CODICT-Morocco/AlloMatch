@@ -32,11 +32,12 @@ namespace AlloMatch.Services
             if (organisations == null)
                 return Response<GetOrganisationsDto>.Failure("User doesn't have any Organisation");
 
-            return new 
+            return Response<GetOrganisationsDto>.Failure("User doesn't have any Organisation");
 
-          
-            
-            
+
+
+
+
 
 
 
