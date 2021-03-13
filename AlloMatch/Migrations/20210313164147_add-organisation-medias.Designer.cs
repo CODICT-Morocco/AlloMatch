@@ -3,14 +3,16 @@ using System;
 using AlloMatch.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlloMatch.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210313164147_add-organisation-medias")]
+    partial class addorganisationmedias
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,10 +189,20 @@ namespace AlloMatch.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<long?>("OrganisationId")
+                        .HasColumnType("bigint");
+
                     b.Property<double>("Size")
                         .HasColumnType("double");
 
+                    b.Property<long?>("SoccerFieldId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganisationId");
+
+                    b.HasIndex("SoccerFieldId");
 
                     b.ToTable("Media");
                 });
@@ -360,39 +372,6 @@ namespace AlloMatch.Migrations
                     b.ToTable("SoccerField");
                 });
 
-            modelBuilder.Entity("AlloMatch.Entities.SoccerFieldMedia", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<long>("MediaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SoccierFieldId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MediaId");
-
-                    b.HasIndex("SoccierFieldId");
-
-                    b.ToTable("SoccerFieldMedia");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
                 {
                     b.Property<long>("Id")
@@ -528,6 +507,17 @@ namespace AlloMatch.Migrations
                     b.Navigation("SoccerField");
                 });
 
+            modelBuilder.Entity("AlloMatch.Entities.Media", b =>
+                {
+                    b.HasOne("AlloMatch.Entities.Organisation", null)
+                        .WithMany("Medias")
+                        .HasForeignKey("OrganisationId");
+
+                    b.HasOne("AlloMatch.Entities.SoccerField", null)
+                        .WithMany("Medias")
+                        .HasForeignKey("SoccerFieldId");
+                });
+
             modelBuilder.Entity("AlloMatch.Entities.OpeningHour", b =>
                 {
                     b.HasOne("AlloMatch.Entities.Organisation", null)
@@ -571,7 +561,7 @@ namespace AlloMatch.Migrations
                         .IsRequired();
 
                     b.HasOne("AlloMatch.Entities.Organisation", "Organisation")
-                        .WithMany("Medias")
+                        .WithMany()
                         .HasForeignKey("OrganisationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -596,25 +586,6 @@ namespace AlloMatch.Migrations
                     b.Navigation("Organisation");
 
                     b.Navigation("ThumbNail");
-                });
-
-            modelBuilder.Entity("AlloMatch.Entities.SoccerFieldMedia", b =>
-                {
-                    b.HasOne("AlloMatch.Entities.Media", "Media")
-                        .WithMany()
-                        .HasForeignKey("MediaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AlloMatch.Entities.SoccerField", "SoccierField")
-                        .WithMany("Medias")
-                        .HasForeignKey("SoccierFieldId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Media");
-
-                    b.Navigation("SoccierField");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>

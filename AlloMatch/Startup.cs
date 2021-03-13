@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace AlloMatch
 {
@@ -36,11 +37,17 @@ namespace AlloMatch
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(
+                options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AlloMatch", Version = "v1" });
             });
+            
+            
+            
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(options => options.UseMySql(connectionString,
@@ -49,6 +56,7 @@ namespace AlloMatch
             services.AddIdentity<ApplicationUser, IdentityRole<long>>(options => options.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
+            services.AddAutoMapper(typeof(MapperProfile));
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -65,6 +73,10 @@ namespace AlloMatch
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrganisationService, OrganisationService>();
+            services.AddScoped<IMediaService, MediaService>();
+
+
 
             services.Configure<MediaConfiguration>(Configuration.GetSection(nameof(MediaConfiguration)));
             services.Configure<JwtConfiguration>(Configuration.GetSection(nameof(JwtConfiguration)));
@@ -118,6 +130,17 @@ namespace AlloMatch
                     }
                 };
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Roles.Professional,
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole(Roles.Professional);
+                    });
+
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -142,6 +165,8 @@ namespace AlloMatch
                         context.SaveChanges();
                     }
                 }
+
+
             }
 
             app.UseHttpsRedirection();

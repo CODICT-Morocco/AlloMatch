@@ -20,11 +20,14 @@ namespace AlloMatch.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtConfiguration _jwtConfiguration;
+        private readonly DataContext _dataContext;
 
-        public UserService(UserManager<ApplicationUser> userManager, IOptions<JwtConfiguration> jwtOptions)
+        public UserService(UserManager<ApplicationUser> userManager, IOptions<JwtConfiguration> jwtOptions,
+                            DataContext dataContext)
         {
             _userManager = userManager;
             _jwtConfiguration = jwtOptions.Value;
+            _dataContext = dataContext;
         }
 
         public async Task<AccessTokenDto> Login(string email, string password)
@@ -47,13 +50,17 @@ namespace AlloMatch.Services
             if (await _userManager.FindByEmailAsync(dto.Email) != null)
                 return Response<ApplicationUser>.Failure("Used.Email");
 
+            var city = await _dataContext.City.FirstOrDefaultAsync(city => city.Id == dto.CityId);
+            if( city == null)
+                return Response<ApplicationUser>.Failure("City.Does.Not.Exist");
+
             var user = new ApplicationUser
             {
                 Email = dto.Email,
                 UserName = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                PhoneNumber = dto.PhoneNumber
+                PhoneNumber = dto.PhoneNumber,
             };
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
@@ -68,7 +75,9 @@ namespace AlloMatch.Services
                 new Organisation
                 {
                     Name = dto.OrganisationName,
-                    PhoneNumber = dto.PhoneNumber
+                    PhoneNumber = dto.PhoneNumber,
+                    City = city,
+                    IsDefault = true
                 }
             };
             await _userManager.UpdateAsync(user);

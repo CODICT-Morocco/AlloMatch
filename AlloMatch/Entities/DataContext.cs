@@ -11,6 +11,12 @@ namespace AlloMatch.Entities
     public class DataContext : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>
     {
         private readonly ICurrentUserService _currentUserService;
+        public DbSet<Booking> Booking { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<Organisation> Organisation { get; set; }
+        public DbSet<SoccerField> SoccerField { get; set; }
+        public DbSet<Media> Media { get; set; }
+        public DbSet<OrganisationMedia> OrganisationMedia { get; set; }
 
         public DataContext(ICurrentUserService currentUserService,
             DbContextOptions options) : base(options)

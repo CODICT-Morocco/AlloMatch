@@ -11,5 +11,6 @@ namespace AlloMatch.Entities
         public string FileName { get; set; }
         public double Size { get; set; }
 
+
     }
 }

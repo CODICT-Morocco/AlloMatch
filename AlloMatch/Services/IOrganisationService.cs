@@ -8,7 +8,8 @@ namespace AlloMatch.Services
 {
     public interface IOrganisationService
     {
-        Task<Response<GetOrganisationsDto>> GetOrganisations(string userId);
+        Task<Response<List<OrganisationDto>>> GetOrganisations(string userId);
+        Task<Response>AddMedia(string userId, long organisationId, MediaEntryDto dto);
 
     }
 }

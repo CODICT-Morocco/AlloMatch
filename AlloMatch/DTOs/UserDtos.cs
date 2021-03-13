@@ -11,7 +11,8 @@ namespace AlloMatch.DTOs
         [Required] string FirstName,
         [Required] string LastName,
         [Required] string PhoneNumber,
-        [Required] string OrganisationName);
+        [Required] string OrganisationName,
+        [Required] long CityId);
     public record UpdateUerInfosDto(
         [Required] string FirstName,
         [Required] string LastName,

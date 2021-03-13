@@ -8,7 +8,4 @@ namespace AlloMatch.DTOs
 
 {
     public record OrganisationDto(string Name, string PhoneNumber);
-    public record GetOrganisationsDto(
-        List<OrganisationDto> Organisations
-        );
 }

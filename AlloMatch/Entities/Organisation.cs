@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlloMatch.Entities
 {
@@ -15,7 +16,7 @@ namespace AlloMatch.Entities
 
         public Media ThumbNail { get; set; }
         public List<OpeningHour> OpeningHours { get; set; }
-        public List<Media> Medias { get; set; }
+        public List<OrganisationMedia> Medias { get; set; }
         public City City { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public List<SoccerField> SoccerFields { get; set; }
