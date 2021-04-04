@@ -17,6 +17,7 @@ namespace AlloMatch.Entities
         public DbSet<SoccerField> SoccerField { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<OrganisationMedia> OrganisationMedia { get; set; }
+        public DbSet<OpeningHour> OpeningHour { get; set; }
 
         public DataContext(ICurrentUserService currentUserService,
             DbContextOptions options) : base(options)

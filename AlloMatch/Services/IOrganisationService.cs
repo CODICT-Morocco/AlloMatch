@@ -10,6 +10,7 @@ namespace AlloMatch.Services
     {
         Task<Response<List<OrganisationDto>>> GetOrganisations(string userId);
         Task<Response>AddMedia(string userId, long organisationId, MediaEntryDto dto);
+        Task<Response> AddWorkingHour(string userId, long organisationId, OpeningHourDto dto);
 
     }
 }

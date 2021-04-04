@@ -77,14 +77,45 @@ namespace AlloMatch.Services
             });
             await _dataContext.SaveChangesAsync();
             return new Response("Media added with success");
-            
-
-
-
-
-
 
         }
 
+        public async Task<Response> AddWorkingHour(string userId, long organisationId, OpeningHourDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return new Response("User Not Found", new string[] { "User.Not.Found" });
+
+
+            var organisation = await _dataContext.Organisation.FindAsync(organisationId);
+            if (organisation == null || organisation?.ApplicationUser != user)
+                return new Response("Organisation Not Found", new string[] { "Organisation.Not.Found" });
+
+            if(dto.From > dto.To)
+                return new Response("From Time is greather than To Time" , new string[] { "From.Greather.To" });
+            
+            
+
+            var openinghour =  _dataContext.OpeningHour.FirstOrDefault(o => o.OrganisationId == organisation.Id && o.WeekDay == dto.weekDay);
+            if(openinghour == null)
+            {
+                _dataContext.OpeningHour.Add(
+                    new OpeningHour
+                    {
+                        WeekDay = dto.weekDay,
+                        From = dto.From,
+                        To = dto.To,
+                        Organisation = organisation
+                    });
+            }
+            else
+            {
+                openinghour.From = dto.From;
+                openinghour.To = dto.To;
+                _dataContext.Update(openinghour);
+            }
+            await _dataContext.SaveChangesAsync();    
+            return new Response("Opening Hour with success");
+        }
     }
 }

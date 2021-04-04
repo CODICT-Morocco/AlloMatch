@@ -11,6 +11,7 @@ namespace AlloMatch.Entities
         public WeekDay WeekDay { get; set; }
         public TimeSpan From { get; set; }
         public TimeSpan To { get; set; }
+        public Organisation Organisation { get; set; }
 
          
     }

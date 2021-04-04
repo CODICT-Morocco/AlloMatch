@@ -32,8 +32,8 @@ namespace AlloMatch.Controllers
 
         }
 
-       // [Authorize(Roles.Professional)]
-        [HttpPost("organisations/{id}/medias")]
+        [Authorize(Roles.Professional)]
+        [HttpPost("{id}/medias")]
         public async Task<Response> AddMedia(long id, [FromForm] MediaModel model)
         {
             await using var stream = model.File.OpenReadStream();
@@ -43,6 +43,15 @@ namespace AlloMatch.Controllers
             return await _organisationService.AddMedia(_currentUserService.UserId,id, mediaEntry);
 
         }
+
+        [Authorize(Roles.Professional)]
+        [HttpPost("{id}/opening-hour")]
+        public async Task<Response> AddOpeningHour(long id, OpeningHourDto dto)
+        { 
+            return await _organisationService.AddWorkingHour(_currentUserService.UserId, id, dto);
+
+        }
+
 
     }
 }
